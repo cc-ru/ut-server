@@ -1,11 +1,24 @@
+local aevent = require("aevent")
+
+local module = {}
 local events = {}
+module.events = events
 
-local function register(engine)
-  events.Init = engine:event("init")
-  events.Stop = engine:event("stop")
-end
+local EventEngine = aevent()
+events.Init = EventEngine:event("init")
+events.Stop = EventEngine:event("stop")
+events.NetMsg = EventEngine:event("netmsg")
 
-return {
-  events = events,
-  register
+EventEngine:stdEvent("modem_message")
+
+module.engine = EventEngine
+
+module.priority = {
+  top = 5,
+  high = 10,
+  normal = 50,
+  low = 75,
+  bottom = 100
 }
+
+return module

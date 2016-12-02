@@ -1,12 +1,9 @@
-local aevent = require("aevent")
-local event = require("event")
+local module = require("ut-serv.modules")
+module.clearCache()
 
-local events = require("ut-serv.events")
+local events = module.load("events")
 
-
-local EventEngine = aevent()
-
-events.register(EventEngine)
+EventEngine = events.engine
 
 EventEngine:push(events.events.Init())
 

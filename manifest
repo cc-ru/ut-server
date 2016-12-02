@@ -5,5 +5,7 @@
  },
  files={
   {url="src/main.lua", dir="/usr/lib/ut-serv", name="main.lua"},
-  {url="src/events.lua", dir="/usr/lib/ut-serv", name="events.lua"}
+  {url="src/events.lua", dir="/usr/lib/ut-serv", name="events.lua"},
+  {url="src/modules.lua", dir="/usr/lib/ut-serv", name="modules.lua"},
+  {url="src/network.lua", dir="/usr/lib/ut-serv", name="network.lua"}
  }}
