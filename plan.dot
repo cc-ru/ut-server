@@ -1,0 +1,45 @@
+digraph plan {
+    node [shape=box];
+
+    b_server   [label="Server" style=filled fillcolor=black fontcolor=white];
+    b_network  [label="Network"];
+    b_auth     [label="Auth"];
+    b_database [label="File database"];
+    b_register [label="Registration"];
+    b_teleport [label="Teleportation"];
+    b_event    [label="Event"];
+    b_coins    [label="Coins"];
+    b_count    [label="Count coins"];
+    b_info     [label="Game information"];
+    b_timeMsg  [label="Time sync message"];
+    b_set      [label="Set/unset coins"];
+    b_start    [label="Event start"];
+    b_end      [label="Event stop"];
+    b_debug    [label="Debug card"];
+
+    b_server -> b_auth;
+    b_server -> b_database;
+    b_auth -> b_register;
+    b_auth -> b_database;
+    b_database -> b_register;
+    b_server -> b_network;
+    b_network -> b_teleport;
+    b_teleport -> b_auth;
+    b_server -> b_event;
+    b_event -> b_start;
+    b_event -> b_end;
+    b_event -> b_info;
+    b_event -> b_coins;
+    b_event -> b_timeMsg;
+    b_coins -> b_set;
+    b_coins -> b_count;
+    b_count -> b_info;
+    b_timeMsg -> b_network;
+    b_info -> b_network [dir=both];
+    b_start -> b_network;
+    b_end -> b_network;
+    b_end -> b_count;
+    b_set -> b_network;
+    b_set -> b_debug;
+    b_teleport -> b_debug;
+}
