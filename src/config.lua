@@ -1,3 +1,7 @@
+-- The config module.
+--
+-- Loads the configuration file.
+
 local fs = require("filesystem")
 
 local path = "/etc/ut-serv.conf"

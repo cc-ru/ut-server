@@ -1,3 +1,7 @@
+-- The event module.
+--
+-- Registers events and listeners.
+
 local aevent = require("aevent")
 
 local module = {}

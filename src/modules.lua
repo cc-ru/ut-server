@@ -1,10 +1,16 @@
+-- The module manager.
+--
+-- Loads modules of the server.
+-- DON'T USE require TO LOAD SERVER MODULES.
+-- Neither use this manager to load system libraries.
+
 local fs = require("filesystem")
 
 local module = {}
 module.path = {
   "/usr/lib/ut-serv/?.lua",
   "/usr/lib/ut-serv/?/init.lua",
-  "/home/lib/ut-serv/?.lua"
+  "/home/lib/ut-serv/?.lua",
   "/home/lib/ut-serv/?/init.lua"
 }
 module.cache = {}

@@ -1,3 +1,8 @@
+-- The network module.
+--
+-- Initializes the networking.
+-- Sends modem messages on event.
+
 local component = require("component")
 
 local module = require("ut-serv.modules")

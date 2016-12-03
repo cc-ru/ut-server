@@ -1,3 +1,10 @@
+-- The main module.
+--
+-- This is where everything starts.
+--
+-- Try to keep as many code as possible in other modules.
+-- This is only for basic initialization.
+
 local module = require("ut-serv.modules")
 module.clearCache()
 
