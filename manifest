@@ -8,5 +8,6 @@
   {url="src/events.lua", dir="/usr/lib/ut-serv", name="events.lua"},
   {url="src/modules.lua", dir="/usr/lib/ut-serv", name="modules.lua"},
   {url="src/network.lua", dir="/usr/lib/ut-serv", name="network.lua"},
-  {url="src/config.lua", dir="/usr/lib/ut-serv", name="config.lua"}
+  {url="src/config.lua", dir="/usr/lib/ut-serv", name="config.lua"},
+  {url="src/db.lua", dir="/usr/ut-serv", name="db.lua"}
  }}
