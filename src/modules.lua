@@ -48,3 +48,5 @@ end
 function module.clearCache()
   module.cache = {}
 end
+
+returnn module
