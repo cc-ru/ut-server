@@ -25,6 +25,14 @@ network.modem.strength = 400
 
 -- Port to listen on and send to.
 network.modem.port = 12345
+--- < Settings related to teleport >---------------------------------------------
+teleport = {
+  ne={x=-222,y=67,z=297},
+  nw={x=0,y=0,z=0},
+  sw={x=0,y=0,z=0},
+  se={x=0,y=0,z=0},
+  top={x=0,y=0,z=0}
+}
 ]==]
 
 if not existsFile(path) then
