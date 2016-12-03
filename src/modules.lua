@@ -20,8 +20,8 @@ function module.load(name)
   if not module.cache[name] then
     local relPath = name:gsub(".", "/")
     local path = false
-    for _, path in pairs(module.path) do
-      local candidate = path:gsub("?", name, nil, true)
+    for _, lpath in pairs(module.path) do
+      local candidate = lpath:gsub("?", name, nil, true)
       if fs.exists(candidate) then
         path = candidate
         break
@@ -48,3 +48,5 @@ end
 function module.clearCache()
   module.cache = {}
 end
+
+return module
