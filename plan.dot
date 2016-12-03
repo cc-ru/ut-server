@@ -3,9 +3,6 @@ digraph plan {
 
     b_server   [label="Server" style=filled fillcolor=black fontcolor=white];
     b_network  [label="Network"];
-    b_auth     [label="Auth"];
-    b_database [label="File database"];
-    b_register [label="Registration"];
     b_teleport [label="Teleportation"];
     b_event    [label="Event"];
     b_coins    [label="Coins"];
@@ -16,15 +13,10 @@ digraph plan {
     b_start    [label="Event start"];
     b_end      [label="Event stop"];
     b_debug    [label="Debug card"];
+    b_glasses  [label="OpenPeripheral glasses"];
+    b_control  [label="Server control"];
 
-    b_server -> b_auth;
-    b_server -> b_database;
-    b_auth -> b_register;
-    b_auth -> b_database;
-    b_database -> b_register;
-    b_server -> b_network;
-    b_network -> b_teleport;
-    b_teleport -> b_auth;
+    b_glasses -> b_teleport;
     b_server -> b_event;
     b_event -> b_start;
     b_event -> b_end;
@@ -42,4 +34,10 @@ digraph plan {
     b_set -> b_network;
     b_set -> b_debug;
     b_teleport -> b_debug;
+    b_control -> b_glasses;
+    b_server -> b_glasses;
+    b_server -> b_control;
+    b_control -> b_start;
+    b_control -> b_end;
+    b_glasses -> b_info;
 }
