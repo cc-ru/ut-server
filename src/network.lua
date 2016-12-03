@@ -14,7 +14,7 @@ end
 modem.setStrength(config.modem.strength)
 modem.open(config.modem.port)
 
-EventEngine:subscribe("netmsg", events.priority.low, function(handler, evt)
+EventEngine:subscribe("sendmsg", events.priority.low, function(handler, evt)
   if evt.addressee then
     modem.send(evt.addressee, config.modem.port, table.unpack(evt:get()))
   else

@@ -1,7 +1,7 @@
 {name="ut-server",
  version="0.0.0",
  dependencies={
-  {name="libaevent", type="required", version="^1"}
+  {name="libaevent", type="required", version="^1.1"}
  },
  files={
   {url="src/main.lua", dir="/usr/lib/ut-serv", name="main.lua"},

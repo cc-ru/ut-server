@@ -7,9 +7,11 @@ module.events = events
 local EventEngine = aevent()
 events.Init = EventEngine:event("init")
 events.Stop = EventEngine:event("stop")
-events.NetMsg = EventEngine:event("netmsg")
+events.SendMsg = EventEngine:event("sendmsg")
+events.GameStart = EventEngine:event("gamestart")
+events.RecvMsg = EventEngine:event("recvmsg")
 
-EventEngine:stdEvent("modem_message")
+EventEngine:stdEvent("modem_message", events.RecvMsg)
 
 module.engine = EventEngine
 
