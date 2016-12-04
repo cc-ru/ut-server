@@ -16,6 +16,6 @@ for _, side in pairs(sides) do
 end
 
 EventEngine:subscribe("teleport", events.priority.low, function(handler, evt)
-  local pl=debug.getPlayer(evt.nick)
-  pl.setPosition(points[evt.point].x,points[evt.point].y,points[evt.point].z)
+  local pl = debug.getPlayer(evt.nick)
+  pl.setPosition(table.unpack(points[evt.point]))
 end)
