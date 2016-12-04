@@ -25,14 +25,37 @@ network.modem.strength = 400
 
 -- Port to listen on and send to.
 network.modem.port = 12345
---- < Settings related to teleport >---------------------------------------------
-teleport = {
-  ne={x=-222,y=67,z=297},
-  nw={x=0,y=0,z=0},
-  sw={x=0,y=0,z=0},
-  se={x=0,y=0,z=0},
-  top={x=0,y=0,z=0}
-}
+
+
+--- < Settings related to teleportation >---------------------------------------
+teleport = {}
+
+-- North point
+teleport.n = {0, 0, 0}
+
+-- North-East point
+teleport.ne = {0, 0, 0}
+
+-- East point
+teleport.e = {0, 0, 0}
+
+-- South-East point
+teleport.se = {0, 0, 0}
+
+-- South point
+teleport.s = {0, 0, 0}
+
+-- South-West point
+teleport.sw = {0, 0, 0}
+
+-- West point
+teleport.w = {0, 0, 0}
+
+-- North-West point
+teleport.nw = {0, 0, 0}
+
+-- Top point
+teleport.top = {0, 0, 0}
 ]==]
 
 if not existsFile(path) then
