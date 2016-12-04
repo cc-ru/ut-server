@@ -61,7 +61,8 @@ teleport.top = {0, 0, 0}
 -- < World interaction settings > ----------------------------------------------
 world = {
   chest = {},
-  item = {}
+  item = {},
+  field = {x = -220, y = 70, z = 290, w = 10, h = 1, l = 10}  --xw;yh;zl
 }
 
 -- Chest block id
@@ -87,6 +88,11 @@ world.item.count = {1, 1}
 
 -- Coin NBT
 world.item.nbt = ""
+
+-- < World interaction settings > ----------------------------------------------
+game = {}
+game.chestLifeTime = 10
+
 ]==]
 
 if not existsFile(path) then
