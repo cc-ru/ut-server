@@ -20,6 +20,8 @@ events.SetChest = EventEngine:event("setchest")
 events.UnsetChest = EventEngine:event("unsetchest")
 events.GlassesAttach = EventEngine:event("glassesattach")
 events.GlassesDetach = EventEngine:event("glassesdetach")
+events.RandomChest = EventEngine:event("randomchest")
+events.WorldTick = EventEngine:event("worldtick")
 
 EventEngine:stdEvent("modem_message", events.RecvMsg)
 EventEngine:stdEvent("glasses_attach", events.GlassesAttach)

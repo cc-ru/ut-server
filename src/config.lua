@@ -86,7 +86,7 @@ world.item.meta = 0
 world.item.count = {1, 1}
 
 -- Coin NBT
-world.item.nbt = {}
+world.item.nbt = ""
 ]==]
 
 if not existsFile(path) then
