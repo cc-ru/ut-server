@@ -4,9 +4,7 @@
 
 local aevent = require("aevent")
 
-local module = {}
 local events = {}
-module.events = events
 
 local EventEngine = aevent()
 events.Init = EventEngine:event("init")
@@ -27,9 +25,9 @@ EventEngine:stdEvent("modem_message", events.RecvMsg)
 EventEngine:stdEvent("glasses_attach", events.GlassesAttach)
 EventEngine:stdEvent("glasses_detach", events.GlassesDetach)
 
-module.engine = EventEngine
+events.engine = EventEngine
 
-module.priority = {
+events.priority = {
   top = 5,
   high = 10,
   normal = 50,
@@ -37,4 +35,4 @@ module.priority = {
   bottom = 100
 }
 
-return module
+return events
