@@ -69,10 +69,11 @@ EventEngine:subscribe("setchest", events.priority.high, function(handler, evt)
 end)
 
 EventEngine:subscribe("unsetchest", events.priority.high, function(handler, evt)
-  local block = {}
-  for _, b in pairs(db.blocks) do
+  local block, index = {}
+  for blkIdx, b in pairs(db.blocks) do
     if b.x == evt.x and b.y == evt.y and b.z == evt.z then
       block = b
+      index = blkIdx
     end
   end
   if not block then
@@ -83,6 +84,7 @@ EventEngine:subscribe("unsetchest", events.priority.high, function(handler, evt)
   if not result then
     evt:cancel()
   end
+  table.remove(db.blocks, index)
 end)
 
 EventEngine:subscribe("worldtick", events.priority.high, function(handler, evt)
