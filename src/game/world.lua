@@ -88,7 +88,8 @@ EventEngine:subscribe("unsetchest", events.priority.high, function(handler, evt)
 end)
 
 EventEngine:subscribe("worldtick", events.priority.high, function(handler, evt)
-  for _, block in pairs(db.blocks) do
+  for i = #db.blocks, 1, -1 do
+    local block = db.blocks[i]
     block.time = block.time - 1
     if block.time <= 0 then
       EventEngine:push(events.UnsetChest {x = block.x,
