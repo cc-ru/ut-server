@@ -15,6 +15,8 @@ local EventEngine = events.engine
 
 local chest = config.get("world", {}, true).get("chest", {}, true)
 local coin = config.get("world", {}, true).get("item", {}, true)
+local field = config.get("world", {}, true).get("field", {}, true)
+local chestLifeTime = config.get("game", {}, true).get("chestLifeTime", 10, true)
 
 local function getBlockData(world, x, y, z)
   local id = world.getBlockId(x, y, z)
@@ -97,4 +99,24 @@ EventEngine:subscribe("worldtick", events.priority.high, function(handler, evt)
                                           z = block.z})
     end
   end
+end)
+
+EventEngine:subscribe("spawnchest", events.priority.high, function(handler, evt)
+  local x, y, z = false, false, false
+  while not x do
+    local tx, ty, tz = math.random(field.x, field.x + field.w - 1),
+                       math.random(field.y, field.y + field.h - 1),
+                       math.random(field.z, field.z + field.l - 1)
+    local bool = true
+    for _,b in pairs(db.blocks) do
+      if (b.x == tx)and(b.y == ty)and(b.z == tz) then
+        bool = false
+        break
+      end
+    end
+    if bool then
+      x, y, z = tx, ty, tz
+    end
+  end
+  EventEngine:push(events.SetChest {x = x, y = y, z = z, time = chestLifeTime})
 end)
