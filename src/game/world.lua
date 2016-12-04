@@ -27,7 +27,7 @@ local function setBlock(world, x, y, z, id, meta, nbt)
   if not success then
     return success, reason
   end
-  local success, reason = world.setTileNBT(nbt)
+  local success, reason = world.setTileNBT(x, y, z, nbt)
   return success, reason
 end
 
