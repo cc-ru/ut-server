@@ -1,10 +1,11 @@
-local debug = require("component").debug
+local com = require("component")
 local module = require("ut-serv.modules")
 
 local events = module.load("events")
 local config = module.load("config")
 
-EventEngine = events.engine
+local debug = com.debug
+local EventEngine = events.engine
 
 local points = {}
 local sides = {"n", "ne", "e", "se", "s", "sw", "w", "nw", "top"}

@@ -27,7 +27,7 @@ network.modem.strength = 400
 network.modem.port = 12345
 
 
---- < Settings related to teleportation >---------------------------------------
+-- < Settings related to teleportation >----------------------------------------
 teleport = {}
 
 -- North point
@@ -56,6 +56,37 @@ teleport.nw = {0, 0, 0}
 
 -- Top point
 teleport.top = {0, 0, 0}
+
+
+-- < World interaction settings > ----------------------------------------------
+world = {
+  chest = {},
+  item = {}
+}
+
+-- Chest block id
+world.chest.id = "minecraft:chest"
+
+-- Chest block metadata
+world.chest.meta = 0
+
+-- Chest NBT
+world.chest.nbt = {}
+
+-- Side to use when inserting a coin
+world.chest.side = 0
+
+-- Coin id
+world.item.id = "minecraft:stone"
+
+-- Coin meta
+world.item.meta = 0
+
+-- Coin count (chosen randomly of values of the interval)
+world.item.count = {1, 1}
+
+-- Coin NBT
+world.item.nbt = {}
 ]==]
 
 if not existsFile(path) then
