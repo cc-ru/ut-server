@@ -15,8 +15,7 @@ for _, side in pairs(sides) do
   points[side] = config.get("teleport", {}, true).get(side, {0, 0, 0})
 end
 
-
 EventEngine:subscribe("teleport", events.priority.low, function(handler, evt)
-  debug.runCommand(("tp %s %d %d %d"):format(evt.nick,
-                                             table.unpack(points[evt.point])))
+  local pl=debug.getPlayer(evt.nick)
+  pl.setPosition(points[evt.point].x,points[evt.point].y,points[evt.point].z)
 end)
