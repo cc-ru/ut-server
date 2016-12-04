@@ -16,6 +16,8 @@ events.GameStart = EventEngine:event("gamestart")
 events.RecvMsg = EventEngine:event("recvmsg")
 events.Quit = EventEngine:event("quit")
 events.Teleport = EventEngine:event("teleport")
+events.SetChest = EventEngine:event("setchest")
+events.UnsetChest = EventEngine:event("unsetchest")
 
 EventEngine:stdEvent("modem_message", events.RecvMsg)
 
