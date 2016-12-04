@@ -32,7 +32,7 @@ local function setBlock(world, x, y, z, id, meta, nbt)
 end
 
 local function setChest(world, x, y, z)
-  local prevBlock = getBlockData(x, y, z)
+  local prevBlock = getBlockData(world, x, y, z)
 
   local success, reason = setBlock(world, x, y, z,
                                    chest.get("id", "minecraft:chest"),
@@ -76,8 +76,8 @@ EventEngine:subscribe("unsetchest", events.priority.high, function(handler, evt)
   if not block then
     evt:cancel()
   end
-  local result = setBlock(evt.x, evt.y, evt.z, block.data.id, block.data.meta,
-                          block.data.nbt)
+  local result = setBlock(debug.getWorld(), evt.x, evt.y, evt.z,
+                          block.data.id, block.data.meta, block.data.nbt)
   if not result then
     evt:cancel()
   end
