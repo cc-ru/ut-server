@@ -18,8 +18,12 @@ events.Quit = EventEngine:event("quit")
 events.Teleport = EventEngine:event("teleport")
 events.SetChest = EventEngine:event("setchest")
 events.UnsetChest = EventEngine:event("unsetchest")
+events.GlassesAttach = EventEngine:event("glassesattach")
+events.GlassesDetach = EventEngine:event("glassesdetach")
 
 EventEngine:stdEvent("modem_message", events.RecvMsg)
+EventEngine:stdEvent("glasses_attach", events.GlassesAttach)
+EventEngine:stdEvent("glasses_detach", events.GlassesDetach)
 
 module.engine = EventEngine
 
