@@ -62,7 +62,6 @@ teleport.top = {0, 0, 0}
 world = {
   chest = {},
   item = {},
-  field = {x = -220, y = 70, z = 290, w = 10, h = 1, l = 10}  --xw;yh;zl
 }
 
 -- Chest block id
@@ -88,6 +87,16 @@ world.item.count = {1, 1}
 
 -- Coin NBT
 world.item.nbt = ""
+
+world.field = {}
+
+-- Define the chest spawn area
+world.field.x = -220
+world.field.y = 70
+world.field.z = 290
+world.field.w = 10
+world.field.h = 1
+world.field.l = 10
 
 -- < World interaction settings > ----------------------------------------------
 game = {}
