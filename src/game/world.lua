@@ -101,7 +101,7 @@ EventEngine:subscribe("worldtick", events.priority.high, function(handler, evt)
   end
 end)
 
-EventEngine:subscribe("spawnchest", events.priority.high, function(handler, evt)
+EventEngine:subscribe("randomchest", events.priority.high, function(handler, evt)
   local x, y, z = false, false, false
   while not x do
     local tx, ty, tz = math.random(field.x, field.x + field.w - 1),
