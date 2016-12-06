@@ -78,7 +78,8 @@ world.chest.side = 0
 
 -- Coin id
 world.item.id = "minecraft:stone"
-
+-- Coin number id
+world.item.id2 = 1
 -- Coin meta
 world.item.meta = 0
 
@@ -98,10 +99,17 @@ world.field.w = 10
 world.field.h = 1
 world.field.l = 10
 
--- < World interaction settings > ----------------------------------------------
+-- < Main game settings > ----------------------------------------------
 game = {}
 game.chestLifeTime = 10
 
+game.chests = {}
+game.chests[1] = {0, 0, 0}
+game.chests[2] = {0, 0, 0}
+game.chests[3] = {0, 0, 0}
+game.chests[4] = {0, 0, 0}
+
+game.chestID = 54
 ]==]
 
 if not existsFile(path) then
