@@ -102,6 +102,7 @@ world.field.l = 10
 -- < Main game settings > ----------------------------------------------
 game = {}
 game.chestLifeTime = 10
+game.chestSpawnInterval = 10
 
 game.chests = {}
 game.chests[1] = {0, 0, 0}
