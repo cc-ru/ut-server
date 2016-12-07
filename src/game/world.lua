@@ -9,6 +9,10 @@ local db = module.load("db")
 local events = module.load("events")
 local config = module.load("config")
 
+if type(db.blocks) ~= "table" then
+  db.blocks = {}
+end
+
 local debug = com.debug
 
 local EventEngine = events.engine
@@ -23,6 +27,15 @@ local function getBlockData(world, x, y, z)
   local meta = world.getMetadata(x, y, z)
   local nbt = world.getTileNBT(x, y, z)
   return {id = id, meta = meta, nbt = nbt}
+end
+
+local function clearInv(world, x, y, z)
+  local data = getBlockData(world, x, y, z)
+  for i = 1, #data.nbt.value.Items.value do
+    b = data.nbt.value.Items.value[i]
+    b.value.id.value = 0
+  end
+  world.setTileNBT(x, y, z, data.nbt)
 end
 
 local function setBlock(world, x, y, z, id, meta, nbt)
@@ -81,6 +94,7 @@ EventEngine:subscribe("unsetchest", events.priority.high, function(handler, evt)
   if not block then
     evt:cancel()
   end
+  clearInv(debug.getWorld(),evt.x,evt.y,evt.z)
   local result = setBlock(debug.getWorld(), evt.x, evt.y, evt.z,
                           block.data.id, block.data.meta, block.data.nbt)
   if not result then
@@ -101,6 +115,15 @@ EventEngine:subscribe("worldtick", events.priority.high, function(handler, evt)
   end
 end)
 
+EventEngine:subcribe("destroychests", events.priority.high, function(handler, evt)
+  for i = #db.blocks, 1, -1 do
+    local block = db.blocks[i]
+    EventEngine:push(events.UnsetChest {x = block.x,
+                                        y = block.y,
+                                        z = block.z})
+  end
+end
+
 EventEngine:subscribe("randomchest", events.priority.high, function(handler, evt)
   local x, y, z = false, false, false
   while not x do
@@ -120,3 +143,5 @@ EventEngine:subscribe("randomchest", events.priority.high, function(handler, evt
   end
   EventEngine:push(events.SetChest {x = x, y = y, z = z, time = chestLifeTime})
 end)
+
+return true
