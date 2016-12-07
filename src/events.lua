@@ -23,6 +23,7 @@ events.RandomChest = EventEngine:event("randomchest")
 events.GetMoney = EventEngine:event("getmoney")
 events.SetPlayerList = EventEngine:event("setplayerlist")
 events.WorldTick = EventEngine:event("worldtick")
+events.DestroyChests = EventEngine:event("destroychests")
 
 EventEngine:stdEvent("modem_message", events.RecvMsg)
 EventEngine:stdEvent("glasses_attach", events.GlassesAttach)
