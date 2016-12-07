@@ -3,6 +3,7 @@ local com = require("component")
 local module = require("ut-serv.modules")
 local db = module.load("db")
 local events = module.load("events")
+local drawUI = module.load("glasses.ui")
 
 local bridge = com.openperipheral_bridge
 
@@ -41,7 +42,7 @@ local function newSurface(user)
 end
 
 local function initSurface(surface)
-  -- TODO: draw GUI
+  drawUI(surface)
 end
 
 
