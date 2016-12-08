@@ -30,11 +30,15 @@ local function getCoins(world, x, y, z)
   if data.id ~= chestID then
     return false
   end
-  for _, item in pairs(data.nbt.value.Items.value) do
-    if item.value.id.value == coinID then
-      money = money + b.value.Count.value
+  for k, item in pairs(data.nbt.value.Items.value) do
+    if k ~= "n" then
+      if item.value.id.value == coinID then
+        money = money + b.value.Count.value
+      else
+        item.value.id.value = 0
+      end
     else
-      item.value.id.value = 0
+      data.nbt.value.Items.value[k] = nil
     end
   end
   world.setTileNBT(x, y, z, data.nbt)
@@ -46,8 +50,12 @@ local function clearInv(world, x, y, z)
   if data.id ~= chestID then
     return false
   end
-  for _, item in pairs(data.nbt.value.Items.value) do
-    item.value.id.value = 0
+  for k, item in pairs(data.nbt.value.Items.value) do
+    if k ~= "n" then
+      item.value.id.value = 0
+    else
+      data.nbt.value.Items.value[k] = nil
+    end
   end
   world.setTileNBT(x, y, z, data.nbt)
 end
