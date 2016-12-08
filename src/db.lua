@@ -24,6 +24,8 @@ return {
   remaining = 0,
   -- time until next score update
   scoreUpdate = 0,
+  -- time until next send message time update
+  sendTime = 0,
   -- the total game time
   time = totalGameTime,
   -- timers
