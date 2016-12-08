@@ -2,23 +2,20 @@ local com = require("component")
 local module = require("ut-serv.modules")
 
 local db = module.load("db")
-module.load("world")
 local events = module.load("events")
 local config = module.load("config")
 
-EventEngine = events.engine
+local EventEngine = events.engine
 
 local debug = com.debug
 
-local gamestate = false
-local timer, timer2, timer3
-local timeToEnd = 0
-local chestCheck = 0
-
-local inv = config.get("game", {}, true).get("chests", {}, true)
-local coinID = config.get("world", {}, true).get("item", {}, true).get("id2", 0, true)
-local chestID = config.get("game", {}, true).get("chestID", 0, true)
-local chestSpawnInterval = config.get("game", {}, true).get("chestSpawnInterval", 30, true)
+local inv = config.get("game", {}, true).get("chests", {})
+local coinID = config.get("world", {}, true).get("item", {}, true).get("id2", 0)
+local chestID = config.get("game", {}, true).get("chestID", 0)
+local chestSpawnInterval = config.get("game", {}, true)
+                                 .get("chestSpawnInterval", 10)
+local scoreUpdateInterval = config.get("game", {}, true)
+                                  .get("scoreUpdateInterval", 3)
 
 local function getBlockData(world, x, y, z)
   local id = world.getBlockId(x, y, z)
@@ -27,18 +24,17 @@ local function getBlockData(world, x, y, z)
   return {id = id, meta = meta, nbt = nbt}
 end
 
-local function getCoins(world, x, y, z) -- get money in slot, in case of found another item kill them
+local function getCoins(world, x, y, z)
   local data = getBlockData(world, x, y, z)
   local money = 0
   if data.id ~= chestID then
     return false
   end
-  for i = 1, #data.nbt.value.Items.value do
-    b = data.nbt.value.Items.value[i]
-    if b.value.id.value == coinID then
+  for _, item in pairs(data.nbt.value.Items.value) do
+    if item.value.id.value == coinID then
       money = money + b.value.Count.value
     else
-      b.value.id.value = 0
+      item.value.id.value = 0
     end
   end
   world.setTileNBT(x, y, z, data.nbt)
@@ -50,64 +46,60 @@ local function clearInv(world, x, y, z)
   if data.id ~= chestID then
     return false
   end
-  for i = 1, #data.nbt.value.Items.value do
-    b = data.nbt.value.Items.value[i]
-    b.value.id.value = 0
+  for _, item in pairs(data.nbt.value.Items.value) do
+    item.value.id.value = 0
   end
   world.setTileNBT(x, y, z, data.nbt)
 end
 
 EventEngine:subscribe("setplayerlist", events.priority.high, function(handler, evt)
-  if type(evt.players) ~= "table" then
-    error("isn't table")
-  end
-  if type(db.players) ~= "table" then
-    db.players = {}
-  end
-  for a,b in pairs(evt.players) do
-    db.players[a] = {name = b, score = 0, chestID = a}
+  for team, name in pairs(evt.players) do
+    db.teams[team].name = name
   end
 end)
 
 EventEngine:subscribe("getmoney", events.priority.high, function(handler, evt)
   local world = debug.getWorld()
-  for a,b in pairs(inv) do
-    db.players[a].score = getCoins(world, table.unpack(b))
+  for team, coords in pairs(inv) do
+    db.teams[team].score = getCoins(world, table.unpack(coords))
   end
 end)
 
 EventEngine:subscribe("gametime", events.priority.high, function(handler, evt)
-  timeToEnd = timeToEnd - 1
-  chestCheck = chestCheck - 1
-  if timeToEnd <= 0 then
-    EventEngine:push(events.GameStop {})
+  db.remaining = db.remaining - 1
+  db.scoreUpdate = db.scoreUpdate - 1
+  if db.remaining <= 0 then
+    EventEngine:push(events.GameStop())
   end
-  if chestCheck <= 0 then
-    EventEngine:push(events.GetMoney {})
-    chestCheck = 3
+  if db.scoreUpdate <= 0 then
+    EventEngine:push(events.GetMoney())
+    db.scoreUpdate = scoreUpdateInterval
   end
 end)
 
 EventEngine:subscribe("gamestart", events.priority.high, function(handler, evt)
-  if not gamestate then
-    gamestate = true
+  if not db.started then
+    db.started = true
     local world = debug.getWorld()
-    for _, b in pairs(inv) do
-      clearInv(world, table.unpack(b))
+    for _, coords in pairs(inv) do
+      clearInv(world, table.unpack(coords))
     end
-    EventEngine:push(events.GetMoney {})
-    timeToEnd = db.time or 300
-    timer = EventEngine:timer(1, EventEngine:event("worldtick"), math.huge)
-    timer2 = EventEngine:timer(chestSpawnInterval, EventEngine:event("randomchest"), math.huge)
-    timer3 = EventEngine:timer(1, EventEngine:event("gametime"), math.huge)
+    EventEngine:push(events.GetMoney())
+    db.remaining = db.time
+    db.timers.worldTick = EventEngine:timer(
+      1, EventEngine:event("worldtick"), math.huge)
+    db.timers.randomChest = EventEngine:timer(
+      chestSpawnInterval, EventEngine:event("randomchest"), math.huge)
+    db.timers.gameTime = EventEngine:timer(
+      1, EventEngine:event("gametime"), math.huge)
   end
 end)
 
 EventEngine:subscribe("gamestop", events.priority.high, function(handler, evt)
-  gamestate = false
-  EventEngine:push(events.GetMoney {})
-  EventEngine:push(events.DestroyChests {})
-  timer:destroy()
-  timer2:destroy()
-  timer3:destroy()
+  db.started = false
+  EventEngine:push(events.GetMoney())
+  EventEngine:push(events.DestroyChests())
+  db.timers.worldTick:destroy()
+  db.timers.randomChest:destroy()
+  db.timers.gameTime:destroy()
 end)

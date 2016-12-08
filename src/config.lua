@@ -91,7 +91,7 @@ world.item.nbt = ""
 
 world.field = {}
 
--- Define the chest spawn area
+-- The chest spawn area
 world.field.x = -220
 world.field.y = 70
 world.field.z = 290
@@ -99,18 +99,31 @@ world.field.w = 10
 world.field.h = 1
 world.field.l = 10
 
--- < Main game settings > ----------------------------------------------
-game = {}
+-- < Game settings > -----------------------------------------------------------
+game = {
+  chests = {}
+}
+
+-- Chest lifetime
 game.chestLifeTime = 10
+
+-- Chest spawn interval
 game.chestSpawnInterval = 10
 
-game.chests = {}
-game.chests[1] = {0, 0, 0}
-game.chests[2] = {0, 0, 0}
-game.chests[3] = {0, 0, 0}
-game.chests[4] = {0, 0, 0}
+-- Score update interval
+game.scoreUpdateInterval = 3
 
+-- Coordinates of team chests
+game.chests.blue = {0, 0, 0}
+game.chests.green = {0, 0, 0}
+game.chests.red = {0, 0, 0}
+game.chests.yellow = {0, 0, 0}
+
+-- The numeric ID of chest
 game.chestID = 54
+
+-- The default game time
+game.totalGameTime = 300
 ]==]
 
 if not existsFile(path) then

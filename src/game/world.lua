@@ -9,18 +9,15 @@ local db = module.load("db")
 local events = module.load("events")
 local config = module.load("config")
 
-if type(db.blocks) ~= "table" then
-  db.blocks = {}
-end
-
 local debug = com.debug
 
 local EventEngine = events.engine
 
-local chest = config.get("world", {}, true).get("chest", {}, true)
-local coin = config.get("world", {}, true).get("item", {}, true)
-local field = config.get("world", {}, true).get("field", {}, true)
-local chestLifeTime = config.get("game", {}, true).get("chestLifeTime", 10, true)
+local chest = config.get("world", {}, true).get("chest", {})
+local coin = config.get("world", {}, true).get("item", {})
+local field = config.get("world", {}, true).get("field", {})
+local chestLifeTime = config.get("game", {}, true)
+                            .get("chestLifeTime", 10)
 
 local function getBlockData(world, x, y, z)
   local id = world.getBlockId(x, y, z)
@@ -31,9 +28,8 @@ end
 
 local function clearInv(world, x, y, z)
   local data = getBlockData(world, x, y, z)
-  for i = 1, #data.nbt.value.Items.value do
-    b = data.nbt.value.Items.value[i]
-    b.value.id.value = 0
+  for _, item in pairs(data.nbt.value.Items.value) do
+    item.value.id.value = 0
   end
   world.setTileNBT(x, y, z, data.nbt)
 end
@@ -104,6 +100,7 @@ EventEngine:subscribe("unsetchest", events.priority.high, function(handler, evt)
 end)
 
 EventEngine:subscribe("worldtick", events.priority.high, function(handler, evt)
+  -- reverse order
   for i = #db.blocks, 1, -1 do
     local block = db.blocks[i]
     block.time = block.time - 1
@@ -116,13 +113,14 @@ EventEngine:subscribe("worldtick", events.priority.high, function(handler, evt)
 end)
 
 EventEngine:subcribe("destroychests", events.priority.high, function(handler, evt)
+  -- reverse order
   for i = #db.blocks, 1, -1 do
     local block = db.blocks[i]
     EventEngine:push(events.UnsetChest {x = block.x,
                                         y = block.y,
                                         z = block.z})
   end
-end
+end)
 
 EventEngine:subscribe("randomchest", events.priority.high, function(handler, evt)
   local x, y, z = false, false, false
@@ -130,18 +128,16 @@ EventEngine:subscribe("randomchest", events.priority.high, function(handler, evt
     local tx, ty, tz = math.random(field.x, field.x + field.w - 1),
                        math.random(field.y, field.y + field.h - 1),
                        math.random(field.z, field.z + field.l - 1)
-    local bool = true
-    for _,b in pairs(db.blocks) do
-      if (b.x == tx)and(b.y == ty)and(b.z == tz) then
-        bool = false
+    local suitable = true
+    for _, b in pairs(db.blocks) do
+      if b.x == tx and b.y == ty and b.z == tz then
+        found = false
         break
       end
     end
-    if bool then
+    if suitable then
       x, y, z = tx, ty, tz
     end
   end
   EventEngine:push(events.SetChest {x = x, y = y, z = z, time = chestLifeTime})
 end)
-
-return true
