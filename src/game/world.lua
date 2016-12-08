@@ -108,6 +108,7 @@ EventEngine:subscribe("worldtick", events.priority.high, function(handler, evt)
       EventEngine:push(events.UnsetChest {x = block.x,
                                           y = block.y,
                                           z = block.z})
+      EventEngine:push(events.SendMsg {"unsetcoin", x, y, z})
     end
   end
 end)
@@ -140,4 +141,5 @@ EventEngine:subscribe("randomchest", events.priority.high, function(handler, evt
     end
   end
   EventEngine:push(events.SetChest {x = x, y = y, z = z, time = chestLifeTime})
+  EventEngine:push(events.SendMsg {"setcoin", x, y, z})
 end)
