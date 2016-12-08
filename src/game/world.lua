@@ -131,7 +131,7 @@ EventEngine:subscribe("randomchest", events.priority.high, function(handler, evt
     local suitable = true
     for _, b in pairs(db.blocks) do
       if b.x == tx and b.y == ty and b.z == tz then
-        found = false
+        suitable = false
         break
       end
     end
