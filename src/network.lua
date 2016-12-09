@@ -4,7 +4,7 @@
 -- Sends modem messages on event.
 
 local component = require("component")
-local sere = require("serialization")
+local srl = require("serialization")
 
 local module = require("ut-serv.modules")
 local events = module.load("events")
@@ -35,12 +35,13 @@ EventEngine:subscribe("sendmsg", events.priority.low, function(handler, evt)
   end
 end)
 
-EventEngine:subscribe("getmsg", events.priority.low, function(handler, evt)
-  mes = table.unpack(evt:get())
--- mes[2] - sender ; mes[5] - first mes
-  if mes[5] == "getInfo" then
-    EventEngine:push(events.SendMsg {addressee = mes[2], db.remaining, db.time, sere.serialize(db.teams), sere.serialize(db.blocks)})
+EventEngine:subscribe("recvmsg", events.priority.low, function(handler, evt)
+  local data = evt:get()
+  if data[5] == "getInfo" then
+    EventEngine:push(events.SendMsg {
+      addressee = data[2],
+      db.remaining,
+      db.time,
+      srl.serialize(db.teams)})
   end
 end)
-
-EventEngine:stdEvent("modem_message",EventEngine:event("getmsg"))

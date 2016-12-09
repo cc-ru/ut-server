@@ -16,6 +16,8 @@ local chestSpawnInterval = config.get("game", {}, true)
                                  .get("chestSpawnInterval", 10)
 local scoreUpdateInterval = config.get("game", {}, true)
                                   .get("scoreUpdateInterval", 3)
+local syncMsgInterval = config.get("game", {}, true)
+                              .get("syncMsgInterval", 10)
 
 local function getBlockData(world, x, y, z)
   local id = world.getBlockId(x, y, z)
@@ -76,7 +78,7 @@ end)
 EventEngine:subscribe("gametime", events.priority.high, function(handler, evt)
   db.remaining = db.remaining - 1
   db.scoreUpdate = db.scoreUpdate - 1
-  db.sendTime = db.sendTime - 1
+  db.syncMsg = db.syncMsg - 1
   if db.remaining <= 0 then
     EventEngine:push(events.GameStop())
   end
@@ -84,9 +86,9 @@ EventEngine:subscribe("gametime", events.priority.high, function(handler, evt)
     EventEngine:push(events.GetMoney())
     db.scoreUpdate = scoreUpdateInterval
   end
-  if db.sendTime <= 0 then
-    EventEngine:push(events.SendMsg{"time",db.remaining,db.time})
-    db.sendTime = 10
+  if db.syncMsg <= 0 then
+    EventEngine:push(events.SendMsg {"time", db.remaining, db.time})
+    db.syncMsg = syncMsgInterval
   end
 end)
 
@@ -105,13 +107,13 @@ EventEngine:subscribe("gamestart", events.priority.high, function(handler, evt)
       chestSpawnInterval, EventEngine:event("randomchest"), math.huge)
     db.timers.gameTime = EventEngine:timer(
       1, EventEngine:event("gametime"), math.huge)
-    EventEngine:push(events.SendMsg{"gamestart"})
+    EventEngine:push(events.SendMsg {"gamestart"})
   end
 end)
 
 EventEngine:subscribe("gamestop", events.priority.high, function(handler, evt)
   db.started = false
-  EventEngine:push(events.SendMsg{"gamestop"})
+  EventEngine:push(events.SendMsg {"gamestop"})
   EventEngine:push(events.GetMoney())
   EventEngine:push(events.DestroyChests())
   db.timers.worldTick:destroy()
