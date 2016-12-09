@@ -29,13 +29,19 @@ local function newSurface(user)
         if reason then
           error("non-nil reason: " .. tostring(reason))
         end
-        self.objects[name] = object
-        self.objects[name].setUserdata({name = name})
+        object.setUserdata({name = name})
+        self.objects[name] = object.getId()
         return object
       end,
       destroy = function(self)
         self.surface.clear()
         self.objects = {}
+      end,
+      get = function(self, name)
+        if not self.objects[name] then
+          error("tried to access '" .. tostring(name) .. "': doesn't exist!")
+        end
+        return self.surface.getObjectById(self.objects[name])
       end
     }
   })
@@ -43,6 +49,7 @@ end
 
 local function initSurface(surface)
   drawUI(surface)
+  bridge.sync()
 end
 
 

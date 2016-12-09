@@ -113,7 +113,7 @@ EventEngine:subscribe("worldtick", events.priority.high, function(handler, evt)
   end
 end)
 
-EventEngine:subcribe("destroychests", events.priority.high, function(handler, evt)
+EventEngine:subscribe("destroychests", events.priority.high, function(handler, evt)
   -- reverse order
   for i = #db.blocks, 1, -1 do
     local block = db.blocks[i]
