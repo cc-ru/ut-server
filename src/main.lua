@@ -6,7 +6,6 @@
 -- This is only for basic initialization.
 
 local event = require("event")
-local comp = require("computer")
 
 local module = require("ut-serv.modules")
 module.clearCache()
@@ -43,4 +42,3 @@ EventEngine:push(events.Stop())
 EventEngine:__gc()
 
 module.clearCache()
-
