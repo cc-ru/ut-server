@@ -56,6 +56,7 @@ end
 
 local function initSurface(surface)
   drawUI(surface)
+  EventEngine:push(events.UIUpdate {surface = surface})
   bridge.sync()
 end
 
@@ -76,6 +77,9 @@ end)
 
 EventEngine:subscribe("glassesdetach", events.priority.normal, function(handler, evt)
   local user = evt[2]
+  if not db.surfaces[user] then
+    error("tried to destroy surface of unexisting user!")
+  end
   db.surfaces[user]:destroy()
   db.surfaces[user] = nil
 end)
@@ -84,8 +88,24 @@ EventEngine:subscribe("stop", events.priority.normal, function(handler, evt)
   for _, surface in pairs(db.surfaces) do
     surface:destroy()
   end
+  bridge.sync()
 end)
 
 EventEngine:subscribe("glassessync", events.priority.normal, function(handler, evt)
+  for _, surface in pairs(db.surfaces) do
+    EventEngine:push(events.UIUpdate {surface = surface})
+  end
   bridge.sync()
+end)
+
+EventEngine:subscribe("debug", events.priority.normal, function(handler, evt)
+  -- XXX: debug
+  print("LIST OF SURFACES:")
+  for k, v in pairs(db.surfaces) do
+    local ids = {}
+    for _, id in pairs(v.objects) do
+      ids[#ids+1]=id
+    end
+    print(tostring(k) .. ": " .. table.concat(ids, ", "))
+  end
 end)

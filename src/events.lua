@@ -25,10 +25,13 @@ events.SetPlayerList = EventEngine:event("setplayerlist")
 events.WorldTick = EventEngine:event("worldtick")
 events.DestroyChests = EventEngine:event("destroychests")
 events.GlassesSync = EventEngine:event("glassessync")
+events.Debug = EventEngine:event("debug")
+events.UIUpdate = EventEngine:event("uiupdate")
 
 EventEngine:stdEvent("modem_message", events.RecvMsg)
 EventEngine:stdEvent("glasses_attach", events.GlassesAttach)
 EventEngine:stdEvent("glasses_detach", events.GlassesDetach)
+EventEngine:stdEvent("key_down", events.Debug)
 
 events.engine = EventEngine
 

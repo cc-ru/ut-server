@@ -1,10 +1,4 @@
 local function drawUI(surface)
-  -- Opacity range: [0.1; 0.75]
-  -- varies depending on the advantage
-  -- ADVANTAGE     OPACITY
-  -- [0%;  50%)    [0.1; 0.33]
-  -- [50%; 100%]   (0.33; 0.75]
-
   -- SCORE
   surface:addObject("score.blue.box", "addBox", 5, 5, 50, 50, 0x20afff, .33)
   local score1 = surface:addObject("score.blue.text", "addText", 13, 20, "00", 0xffffff)

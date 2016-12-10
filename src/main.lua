@@ -19,6 +19,7 @@ module.load("db")
 module.load("game.world")
 module.load("game.teleport")
 module.load("glasses.ui")
+module.load("glasses.update")
 module.load("glasses.surface")
 
 EventEngine = events.engine
@@ -33,7 +34,7 @@ EventEngine:subscribe("quit", events.priority.bottom, function(handler, evt)
 end)
 
 while running do
-  if event.pull(.06, "interrupted") then
+  if event.pull(.05, "interrupted") then
     running = false
   end
 end
