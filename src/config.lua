@@ -124,6 +124,12 @@ game.chestID = 54
 
 -- The default game time
 game.totalGameTime = 300
+
+-- < Glasses related settings > ------------------------------------------------
+glasses = {}
+
+-- Sync interval
+glasses.syncInterval = 0.5
 ]==]
 
 if not existsFile(path) then

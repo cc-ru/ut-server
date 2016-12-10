@@ -1,6 +1,7 @@
 local com = require("component")
 
 local module = require("ut-serv.modules")
+local config = module.load("config")
 local db = module.load("db")
 local events = module.load("events")
 local drawUI = module.load("glasses.ui")
@@ -8,6 +9,12 @@ local drawUI = module.load("glasses.ui")
 local bridge = com.openperipheral_bridge
 
 local EventEngine = events.engine
+
+EventEngine:timer(
+  config.get("glasses", {}, true)
+        .get("syncInterval", 0.5),
+  events.GlassesSync,
+  math.huge)
 
 local function newSurface(user)
   local surface, reason = bridge.getSurfaceByName(user)
@@ -71,4 +78,14 @@ EventEngine:subscribe("glassesdetach", events.priority.normal, function(handler,
   local user = evt[2]
   db.surfaces[user]:destroy()
   db.surfaces[user] = nil
+end)
+
+EventEngine:subscribe("stop", events.priority.normal, function(handler, evt)
+  for _, surface in pairs(db.surfaces) do
+    surface:destroy()
+  end
+end)
+
+EventEngine:subscribe("glassessync", events.priority.normal, function(handler, evt)
+  bridge.sync()
 end)
