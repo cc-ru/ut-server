@@ -24,8 +24,7 @@ module.load("glasses.surface")
 
 EventEngine = events.engine
 
-local instance = events.Init()
-EventEngine:push(instance)
+EventEngine:push(events.Init())
 
 local running = true
 
