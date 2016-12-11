@@ -110,7 +110,7 @@ EventEngine:subscribe("worldtick", events.priority.high, function(handler, evt)
       EventEngine:push(events.UnsetChest {x = block.x,
                                           y = block.y,
                                           z = block.z})
-      EventEngine:push(events.SendMsg {"unsetcoin", x, y, z})
+      EventEngine:push(events.SendMsg {"unsetcoin", block.x, block.y, block.z})
     end
   end
 end)

@@ -128,6 +128,9 @@ game.chestID = 54
 -- The default game time
 game.totalGameTime = 300
 
+-- People who can control the server
+game.admins = {"Fingercomp", "Totoro"}
+
 -- < Glasses related settings > ------------------------------------------------
 glasses = {}
 

@@ -10,11 +10,22 @@ local bridge = com.openperipheral_bridge
 
 local EventEngine = events.engine
 
+local admins = config.get("game", {}, true).get("admins", {"Fingercomp"})
+
 EventEngine:timer(
   config.get("glasses", {}, true)
         .get("syncInterval", 0.5),
   events.GlassesSync,
   math.huge)
+
+local function checkAdmin(nick)
+  for _, admin in pairs(admins) do
+    if nick == admin then
+      return true
+    end
+  end
+  return false
+end
 
 local function newSurface(user)
   local surface, reason = bridge.getSurfaceByName(user)
@@ -67,6 +78,14 @@ end
 local function initSurface(surface)
   drawUI(surface)
   EventEngine:push(events.UIUpdate {surface = surface})
+  if not checkAdmin(surface.user) then
+    local box = surface:get("admin.startstop.box")
+    local text = surface:get("admin.startstop.text")
+    box.setVisible(false)
+    box.setClickable(false)
+    text.setVisible(false)
+    text.setClickable(false)
+  end
   bridge.sync()
 end
 
@@ -113,10 +132,12 @@ EventEngine:subscribe("glasssescomponentmousedown", events.priority.normal, func
   local object = surface:get(evt[4])
   if object == "admin.startstop.box" or
      object == "admin.startstop.text" then
-    if db.started then
-      EventEngine:push(events.GameStop())
-    else
-      EventEngine:push(events.GameStart())
+    if checkAdmin(evt[2]) then
+      if db.started then
+        EventEngine:push(events.GameStop())
+      else
+        EventEngine:push(events.GameStart())
+      end
     end
   elseif object == "tp.map.point.w.point" or
          object == "tp.map.point.nw.point" or
@@ -149,10 +170,14 @@ EventEngine:subscribe("glasssescomponentmousedown", events.priority.normal, func
          object == "nicks.red.text" or
          object == "nicks.yellow.box" or
          object == "nicks.yellow.text" then
-    local team = object:match("^nicks%.(.-)%..+$")
-    surface.lastClick = "nicks." .. team
+    if checkAdmin(evt[2]) then
+      local team = object:match("^nicks%.(.-)%..+$")
+      surface.lastClick = "nicks." .. team
+    end
   elseif object == "time.total.time" then
-    surface.lastClick = "time.total"
+    if checkAdmin(evt[2]) then
+      surface.lastClick = "time.total"
+    end
   else
     surface.lastClick = false
   end
@@ -167,14 +192,18 @@ EventEngine:subscribe("glasseschatcommand", events.priority.normal, function(han
   local surface = db.surfaces[evt[2]]
   if surface.lastClick then
     if surface.lastClick:match("^nicks.[^.]+$") then
-      local team = surface.lastClick:match("^nicks.([^.]+)$")
-      db.teams[team].name = evt[4]
+      if checkAdmin(evt[2]) then
+        local team = surface.lastClick:match("^nicks.([^.]+)$")
+        db.teams[team].name = evt[4]
+      end
     elseif surface.lastClick == "time.total" then
       if not db.started then
         if evt[4]:match("%d%d:%d%d") then
-          local min, sec = evt[4]:match("(%d%d):(%d%d)")
-          min, sec = tonumber(min), tonumber(sec)
-          db.time = min * 60 + sec
+          if checkAdmin(evt[2]) then
+            local min, sec = evt[4]:match("(%d%d):(%d%d)")
+            min, sec = tonumber(min), tonumber(sec)
+            db.time = min * 60 + sec
+          end
         end
       end
     end
