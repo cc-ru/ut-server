@@ -180,15 +180,3 @@ EventEngine:subscribe("glasseschatcommand", events.priority.normal, function(han
     end
   end
 end)
-
-EventEngine:subscribe("debug", events.priority.normal, function(handler, evt)
-  -- XXX: debug
-  print("LIST OF SURFACES:")
-  for k, v in pairs(db.surfaces) do
-    local ids = {}
-    for _, id in pairs(v.objects) do
-      ids[#ids+1]=id
-    end
-    print(tostring(k) .. ": " .. table.concat(ids, ", "))
-  end
-end)

@@ -42,5 +42,3 @@ EventEngine:subscribe("getmsg", events.priority.low, function(handler, evt)
     EventEngine:push(events.SendMsg {addressee = mes[2], db.remaining, db.time, sere.serialize(db.teams), sere.serialize(db.blocks)})
   end
 end)
-
-EventEngine:stdEvent("modem_message",EventEngine:event("getmsg"))
