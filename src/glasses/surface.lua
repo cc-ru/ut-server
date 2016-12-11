@@ -25,7 +25,8 @@ local function newSurface(user)
   return setmetatable({
     surface = surface,
     objects = {},
-    user = user
+    user = user,
+    lastClick = false
   }, {
     __index = {
       addObject = function(self, name, func, ...)
@@ -45,10 +46,19 @@ local function newSurface(user)
         self.objects = {}
       end,
       get = function(self, name)
-        if not self.objects[name] then
-          error("tried to access '" .. tostring(name) .. "': doesn't exist!")
+        if type(name) == "string" then
+          if not self.objects[name] then
+            error("tried to access '" .. tostring(name) .. "': doesn't exist!")
+          end
+          return self.surface.getObjectById(self.objects[name])
+        elseif type(name) == "number" then
+          for k, v in pairs(self.objects) do
+            if v == name then
+              return k
+            end
+          end
         end
-        return self.surface.getObjectById(self.objects[name])
+        error("bad argument #1")
       end
     }
   })
@@ -96,6 +106,84 @@ EventEngine:subscribe("glassessync", events.priority.normal, function(handler, e
     EventEngine:push(events.UIUpdate {surface = surface})
   end
   bridge.sync()
+end)
+
+EventEngine:subscribe("glasssescomponentmousedown", events.priority.normal, function(handler, evt)
+  print("MOUSE DOWN")
+  print(evt:get())
+  local surface = db.surfaces[evt[2]]
+  local object = surface:get(evt[4])
+  print(object)
+  if object == "admin.startstop.box" or
+     object == "admin.startstop.text" then
+    if db.started then
+      EventEngine:push(events.GameStop())
+    else
+      EventEngine:push(events.GameStart())
+    end
+  elseif object == "tp.map.point.w.point" or
+         object == "tp.map.point.nw.point" or
+         object == "tp.map.point.n.point" or
+         object == "tp.map.point.ne.point" or
+         object == "tp.map.point.e.point" or
+         object == "tp.map.point.se.point" or
+         object == "tp.map.point.s.point" or
+         object == "tp.map.point.sw.point" or
+         object == "tp.map.point.top.point" then
+    local point = object:match(".+%.(.-)%.point$")
+    EventEngine:push(events.Teleport {nick = evt[2], point = point})
+  elseif object == "nicks.blue.box.small" or
+         object == "nicks.green.box.small" or
+         object == "nicks.red.box.small" or
+         object == "nicks.yellow.box.small" then
+    local team = object:match("^nicks%.(.-)%..+$")
+    local box = surface:get("nicks." .. team .. ".box")
+    local text = surface:get("nicks." .. team .. ".text")
+
+    box.setClickable(not box.getClickable())
+    box.setVisible(not box.getVisible())
+    text.setClickable(not text.getClickable())
+    text.setVisible(not text.getVisible())
+  elseif object == "nicks.blue.box" or
+         object == "nicks.blue.text" or
+         object == "nicks.green.box" or
+         object == "nicks.green.text" or
+         object == "nicks.red.box" or
+         object == "nicks.red.text" or
+         object == "nicks.yellow.box" or
+         object == "nicks.yellow.text" then
+    local team = object:match("^nicks%.(.-)%..+$")
+    surface.lastClick = "nicks." .. team
+  elseif object == "time.total.time" then
+    surface.lastClick = "time.total"
+  else
+    surface.lastClick = false
+  end
+end)
+
+EventEngine:subscribe("glassesmousedown", events.priority.normal, function(handler, evt)
+  local surface = db.surfaces[evt[2]]
+  surface.lastClick = false
+end)
+
+EventEngine:subscribe("glasseschatcommand", events.priority.normal, function(handler, evt)
+  print("CHAT COMMAND")
+  print(evt:get())
+  local surface = db.surfaces[evt[2]]
+  if surface.lastClick then
+    if surface.lastClick:match("^nicks.[^.]+$") then
+      local team = surface.lastClick:match("^nicks.([^.]+)$")
+      db.teams[team].name = evt[4]
+    elseif surface.lastClick == "time.total" then
+      if not db.started then
+        if evt[4]:match("%d%d:%d%d") then
+          local min, sec = evt[4]:match("(%d%d):(%d%d)")
+          min, sec = tonumber(min), tonumber(sec)
+          db.time = min * 60 + sec
+        end
+      end
+    end
+  end
 end)
 
 EventEngine:subscribe("debug", events.priority.normal, function(handler, evt)
