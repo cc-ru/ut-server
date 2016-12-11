@@ -109,11 +109,8 @@ EventEngine:subscribe("glassessync", events.priority.normal, function(handler, e
 end)
 
 EventEngine:subscribe("glasssescomponentmousedown", events.priority.normal, function(handler, evt)
-  print("MOUSE DOWN")
-  print(evt:get())
   local surface = db.surfaces[evt[2]]
   local object = surface:get(evt[4])
-  print(object)
   if object == "admin.startstop.box" or
      object == "admin.startstop.text" then
     if db.started then
@@ -167,8 +164,6 @@ EventEngine:subscribe("glassesmousedown", events.priority.normal, function(handl
 end)
 
 EventEngine:subscribe("glasseschatcommand", events.priority.normal, function(handler, evt)
-  print("CHAT COMMAND")
-  print(evt:get())
   local surface = db.surfaces[evt[2]]
   if surface.lastClick then
     if surface.lastClick:match("^nicks.[^.]+$") then

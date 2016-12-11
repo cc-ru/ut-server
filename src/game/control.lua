@@ -73,7 +73,7 @@ EventEngine:subscribe("getmoney", events.priority.high, function(handler, evt)
   end
 end)
 
-EventEngine:subscribe("gametime", events.priority.high, function(handler, evt)
+EventEngine:subscribe("worldtick", events.priority.high, function(handler, evt)
   db.remaining = db.remaining - 1
   db.scoreUpdate = db.scoreUpdate - 1
   db.sendTime = db.sendTime - 1
@@ -85,7 +85,7 @@ EventEngine:subscribe("gametime", events.priority.high, function(handler, evt)
     db.scoreUpdate = scoreUpdateInterval
   end
   if db.sendTime <= 0 then
-    EventEngine:push(events.SendMsg{"time",db.remaining,db.time})
+    EventEngine:push(events.SendMsg {"time", db.remaining, db.time})
     db.sendTime = 10
   end
 end)
@@ -100,21 +100,18 @@ EventEngine:subscribe("gamestart", events.priority.high, function(handler, evt)
     EventEngine:push(events.GetMoney())
     db.remaining = db.time
     db.timers.worldTick = EventEngine:timer(
-      1, EventEngine:event("worldtick"), math.huge)
+      1, events.WorldTick, math.huge)
     db.timers.randomChest = EventEngine:timer(
-      chestSpawnInterval, EventEngine:event("randomchest"), math.huge)
-    db.timers.gameTime = EventEngine:timer(
-      1, EventEngine:event("gametime"), math.huge)
-    EventEngine:push(events.SendMsg{"gamestart"})
+      chestSpawnInterval, events.RandomChest, math.huge)
+    EventEngine:push(events.SendMsg {"gamestart"})
   end
 end)
 
 EventEngine:subscribe("gamestop", events.priority.high, function(handler, evt)
   db.started = false
-  EventEngine:push(events.SendMsg{"gamestop"})
+  EventEngine:push(events.SendMsg {"gamestop"})
   EventEngine:push(events.GetMoney())
   EventEngine:push(events.DestroyChests())
   db.timers.worldTick:destroy()
   db.timers.randomChest:destroy()
-  db.timers.gameTime:destroy()
 end)
