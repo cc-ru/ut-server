@@ -18,10 +18,10 @@ module.cache = {}
 function module.load(name)
   checkArg(1, name, "string")
   if not module.cache[name] then
-    local relPath = name:gsub(".", "/")
+    local relPath = name:gsub("%.", "/")
     local path = false
     for _, lpath in pairs(module.path) do
-      local candidate = lpath:gsub("?", name, nil, true)
+      local candidate = lpath:gsub("?", relPath, nil, true)
       if fs.exists(candidate) then
         path = candidate
         break

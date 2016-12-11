@@ -28,8 +28,10 @@ end
 
 local function clearInv(world, x, y, z)
   local data = getBlockData(world, x, y, z)
-  for _, item in pairs(data.nbt.value.Items.value) do
-    item.value.id.value = 0
+  for k, item in pairs(data.nbt.value.Items.value) do
+    if k ~= "n" then
+      item.value.id.value = 0
+    end
   end
   world.setTileNBT(x, y, z, data.nbt)
 end
@@ -108,12 +110,12 @@ EventEngine:subscribe("worldtick", events.priority.high, function(handler, evt)
       EventEngine:push(events.UnsetChest {x = block.x,
                                           y = block.y,
                                           z = block.z})
-      EventEngine:push(events.SendMsg {"unsetcoin", x, y, z})
+      EventEngine:push(events.SendMsg {"unsetcoin", block.x, block.y, block.z})
     end
   end
 end)
 
-EventEngine:subcribe("destroychests", events.priority.high, function(handler, evt)
+EventEngine:subscribe("destroychests", events.priority.high, function(handler, evt)
   -- reverse order
   for i = #db.blocks, 1, -1 do
     local block = db.blocks[i]
@@ -142,4 +144,5 @@ EventEngine:subscribe("randomchest", events.priority.high, function(handler, evt
   end
   EventEngine:push(events.SetChest {x = x, y = y, z = z, time = chestLifeTime})
   EventEngine:push(events.SendMsg {"setcoin", x, y, z})
+  print("[" .. db.remaining .. "] Set a coin at " .. x .. ", " .. y .. ", " .. z)
 end)

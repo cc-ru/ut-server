@@ -127,6 +127,15 @@ game.chestID = 54
 
 -- The default game time
 game.totalGameTime = 300
+
+-- People who can control the server
+game.admins = {"Fingercomp", "Totoro"}
+
+-- < Glasses related settings > ------------------------------------------------
+glasses = {}
+
+-- Sync interval
+glasses.syncInterval = 0.5
 ]==]
 
 if not existsFile(path) then

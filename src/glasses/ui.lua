@@ -1,10 +1,4 @@
 local function drawUI(surface)
-  -- Opacity range: [0.1; 0.75]
-  -- varies depending on the advantage
-  -- ADVANTAGE     OPACITY
-  -- [0%;  50%)    [0.1; 0.33]
-  -- [50%; 100%]   (0.33; 0.75]
-
   -- SCORE
   surface:addObject("score.blue.box", "addBox", 5, 5, 50, 50, 0x20afff, .33)
   local score1 = surface:addObject("score.blue.text", "addText", 13, 20, "00", 0xffffff)
@@ -53,19 +47,19 @@ local function drawUI(surface)
 
   -- NICKS
   surface:addObject("nicks.blue.box.small", "addBox", 210, 5, 5, 11, 0x20afff)
-  surface:addObject("nicks.blue.box", "addBox", 215, 5, 200, 11, 0x20afff, .5)
+  surface:addObject("nicks.blue.box", "addBox", 215, 5, 150, 11, 0x20afff, .5)
   surface:addObject("nicks.blue.text", "addText", 217, 7, "Fingercomp", 0xffffff)
 
   surface:addObject("nicks.green.box.small", "addBox", 210, 18, 5, 11, 0x20ff20)
-  surface:addObject("nicks.green.box", "addBox", 215, 18, 200, 11, 0x20ff20, .5)
+  surface:addObject("nicks.green.box", "addBox", 215, 18, 150, 11, 0x20ff20, .5)
   surface:addObject("nicks.green.text", "addText", 217, 20, "Fingercomp", 0xffffff)
 
   surface:addObject("nicks.red.box.small", "addBox", 210, 31, 5, 11, 0xff2020)
-  surface:addObject("nicks.red.box", "addBox", 215, 31, 200, 11, 0xff2020, .5)
+  surface:addObject("nicks.red.box", "addBox", 215, 31, 150, 11, 0xff2020, .5)
   surface:addObject("nicks.red.text", "addText", 217, 33, "Fingercomp", 0xffffff)
 
   surface:addObject("nicks.yellow.box.small", "addBox", 210, 44, 5, 11, 0xffff20)
-  surface:addObject("nicks.yellow.box", "addBox", 215, 44, 200, 11, 0xffff20, .5)
+  surface:addObject("nicks.yellow.box", "addBox", 215, 44, 150, 11, 0xffff20, .5)
   surface:addObject("nicks.yellow.text", "addText", 217, 46, "Fingercomp", 0xffffff)
 
   -- TELEPORTATION
@@ -156,7 +150,7 @@ local function drawUI(surface)
     local height = 4
     local gap = 1
     local b = surface:addObject(name .. ".back", "addBox", x - width / 2 - gap, y - height / 2 - gap, width + 2 * gap, height + 2 * gap, 0xffffff, .5)
-    local p = surface:addObject(name .. ".point", "addBox", x - width / 2, y - height / 2, width, height, color, 1)
+    local p = surface:addObject(name .. ".point", "addBox", x - width / 2, y - height / 2, width, height, 0x000000, 1)
     b.setScreenAnchor("RIGHT", "TOP")
     p.setScreenAnchor("RIGHT", "TOP")
   end

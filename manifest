@@ -1,5 +1,5 @@
 {name="ut-server",
- version="0.0.0",
+ version="1.0.0",
  dependencies={
   {name="libaevent", type="required", version="^1.1"}
  },
@@ -12,6 +12,8 @@
   {url="src/db.lua", dir="/usr/lib/ut-serv", name="db.lua"},
   {url="src/game/world.lua", dir="/usr/lib/ut-serv/game", name="world.lua"},
   {url="src/game/teleport.lua", dir="/usr/lib/ut-serv/game", name="teleport.lua"},
+  {url="src/game/control.lua", dir="/usr/lib/ut-serv/game", name="control.lua"},
   {url="src/glasses/surface.lua", dir="/usr/lib/ut-serv/glasses", name="surface.lua"},
-  {url="src/glasses/ui.lua", dir="/usr/lib/ut-serv/glasses", name="ui.lua"}
+  {url="src/glasses/ui.lua", dir="/usr/lib/ut-serv/glasses", name="ui.lua"},
+  {url="src/glasses/update.lua", dir="/usr/lib/ut-serv/glasses", name="update.lua"}
  }}

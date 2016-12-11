@@ -24,10 +24,18 @@ events.GetMoney = EventEngine:event("getmoney")
 events.SetPlayerList = EventEngine:event("setplayerlist")
 events.WorldTick = EventEngine:event("worldtick")
 events.DestroyChests = EventEngine:event("destroychests")
+events.GlassesSync = EventEngine:event("glassessync")
+events.UIUpdate = EventEngine:event("uiupdate")
+events.GlassesMouseDown = EventEngine:event("glassesmousedown")
+events.GlassesComponentMouseDown = EventEngine:event("glasssescomponentmousedown")
+events.GlassesChatCommand = EventEngine:event("glasseschatcommand")
 
 EventEngine:stdEvent("modem_message", events.RecvMsg)
 EventEngine:stdEvent("glasses_attach", events.GlassesAttach)
 EventEngine:stdEvent("glasses_detach", events.GlassesDetach)
+EventEngine:stdEvent("glasses_component_mouse_down", events.GlassesComponentMouseDown)
+EventEngine:stdEvent("glasses_mouse_down", events.GlassesMouseDown)
+EventEngine:stdEvent("glasses_chat_command", events.GlassesChatCommand)
 
 events.engine = EventEngine
 

@@ -35,7 +35,7 @@ local function getCoins(world, x, y, z)
   for k, item in pairs(data.nbt.value.Items.value) do
     if k ~= "n" then
       if item.value.id.value == coinID then
-        money = money + b.value.Count.value
+        money = money + item.value.Count.value
       else
         item.value.id.value = 0
       end
@@ -69,13 +69,14 @@ EventEngine:subscribe("setplayerlist", events.priority.high, function(handler, e
 end)
 
 EventEngine:subscribe("getmoney", events.priority.high, function(handler, evt)
+  print("[" .. db.remaining .. "] Updating score")
   local world = debug.getWorld()
   for team, coords in pairs(inv) do
     db.teams[team].score = getCoins(world, table.unpack(coords))
   end
 end)
 
-EventEngine:subscribe("gametime", events.priority.high, function(handler, evt)
+EventEngine:subscribe("worldtick", events.priority.high, function(handler, evt)
   db.remaining = db.remaining - 1
   db.scoreUpdate = db.scoreUpdate - 1
   db.syncMsg = db.syncMsg - 1
@@ -102,12 +103,11 @@ EventEngine:subscribe("gamestart", events.priority.high, function(handler, evt)
     EventEngine:push(events.GetMoney())
     db.remaining = db.time
     db.timers.worldTick = EventEngine:timer(
-      1, EventEngine:event("worldtick"), math.huge)
+      1, events.WorldTick, math.huge)
     db.timers.randomChest = EventEngine:timer(
-      chestSpawnInterval, EventEngine:event("randomchest"), math.huge)
-    db.timers.gameTime = EventEngine:timer(
-      1, EventEngine:event("gametime"), math.huge)
+      chestSpawnInterval, events.RandomChest, math.huge)
     EventEngine:push(events.SendMsg {"gamestart"})
+    print("[" .. db.remaining .. "] THE GAME STARTED")
   end
 end)
 
@@ -118,5 +118,5 @@ EventEngine:subscribe("gamestop", events.priority.high, function(handler, evt)
   EventEngine:push(events.DestroyChests())
   db.timers.worldTick:destroy()
   db.timers.randomChest:destroy()
-  db.timers.gameTime:destroy()
+  print("[" .. db.remaining .. "] THE GAME STOPPED")
 end)
