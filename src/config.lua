@@ -113,6 +113,9 @@ game.chestSpawnInterval = 10
 -- Score update interval
 game.scoreUpdateInterval = 3
 
+-- Sync message interval
+game.syncMsgInterval = 10
+
 -- Coordinates of team chests
 game.chests.blue = {0, 0, 0}
 game.chests.green = {0, 0, 0}
