@@ -28,5 +28,5 @@ $ edit /etc/ut-serv.conf
 
 
 ```
-$ /usr/lib/ut-serv/main.lua
+$ ut-serv
 ```
